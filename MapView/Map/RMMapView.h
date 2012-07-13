@@ -64,8 +64,7 @@ typedef enum : NSUInteger {
 } RMMapDecelerationMode;
 
 
-@interface RMMapView : UIView <UIScrollViewDelegate, RMMapOverlayViewDelegate,
-                               RMMapTiledLayerViewDelegate, RMMapScrollViewDelegate>
+@interface RMMapView : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate, RMMapScrollViewDelegate>
 
 @property (nonatomic, assign) id <RMMapViewDelegate> delegate;
 
@@ -168,6 +167,7 @@ typedef enum : NSUInteger {
 #pragma mark - Annotations
 
 @property (nonatomic, readonly) NSArray *annotations;
+@property (nonatomic, readonly) NSArray *visibleAnnotations;
 
 - (void)addAnnotation:(RMAnnotation *)annotation;
 - (void)addAnnotations:(NSArray *)annotations;
@@ -203,6 +203,9 @@ typedef enum : NSUInteger {
 
 - (void)setHidden:(BOOL)isHidden forTileSource:(id <RMTileSource>)tileSource;
 - (void)setHidden:(BOOL)isHidden forTileSourceAtIndex:(NSUInteger)index;
+
+- (void)reloadTileSource:(id <RMTileSource>)tileSource;
+- (void)reloadTileSourceAtIndex:(NSUInteger)index;
 
 #pragma mark - Cache
 
