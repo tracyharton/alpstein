@@ -38,6 +38,10 @@
 #import "RMMapScrollView.h"
 #import "RMTileSourcesContainer.h"
 
+#define kRMUserLocationAnnotationTypeName   @"RMUserLocationAnnotation"
+#define kRMTrackingHaloAnnotationTypeName   @"RMTrackingHaloAnnotation"
+#define kRMAccuracyCircleAnnotationTypeName @"RMAccuracyCircleAnnotation"
+
 @class RMProjection;
 @class RMFractalTileProjection;
 @class RMTileCache;
@@ -47,6 +51,7 @@
 @class RMMarker;
 @class RMAnnotation;
 @class RMQuadTree;
+@class RMUserLocation;
 
 
 // constants for boundingMask
@@ -64,7 +69,7 @@ typedef enum : NSUInteger {
 } RMMapDecelerationMode;
 
 
-@interface RMMapView : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate, RMMapScrollViewDelegate>
+@interface RMMapView : UIView <UIScrollViewDelegate, UIGestureRecognizerDelegate, RMMapScrollViewDelegate, CLLocationManagerDelegate>
 
 @property (nonatomic, assign) id <RMMapViewDelegate> delegate;
 
@@ -234,5 +239,15 @@ typedef enum : NSUInteger {
 - (RMTile)tileWithCoordinate:(CLLocationCoordinate2D)coordinate andZoom:(int)zoom;
 
 - (RMSphericalTrapezium)latitudeLongitudeBoundingBoxForTile:(RMTile)aTile;
+
+#pragma mark -
+#pragma mark User Location
+
+@property (nonatomic, assign)   BOOL showsUserLocation;
+@property (nonatomic, readonly) RMUserLocation *userLocation;
+@property (nonatomic, readonly, getter=isUserLocationVisible) BOOL userLocationVisible;
+@property (nonatomic, assign)   RMUserTrackingMode userTrackingMode;
+
+- (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated;
 
 @end

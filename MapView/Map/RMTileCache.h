@@ -65,6 +65,7 @@ typedef enum : short {
 
 // Add another cache to the chain
 - (void)addCache:(id <RMTileCache>)cache;
+- (void)insertCache:(id <RMTileCache>)cache atIndex:(NSUInteger)index;
 
 - (void)didReceiveMemoryWarning;
 

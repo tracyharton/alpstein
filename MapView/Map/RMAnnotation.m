@@ -50,6 +50,7 @@
 @synthesize enabled, clusteringEnabled;
 @synthesize position;
 @synthesize quadTreeNode;
+@synthesize isUserLocationAnnotation;
 
 + (id)annotationWithMapView:(RMMapView *)aMapView coordinate:(CLLocationCoordinate2D)aCoordinate andTitle:(NSString *)aTitle
 {
@@ -74,6 +75,8 @@
     self.hasBoundingBox    = NO;
     self.enabled           = YES;
     self.clusteringEnabled = YES;
+
+    self.isUserLocationAnnotation = NO;
 
     layer = nil;
 
@@ -176,6 +179,11 @@
 - (BOOL)isAnnotationVisibleOnScreen
 {
     return (layer != nil);
+}
+
+- (void)setIsUserLocationAnnotation:(BOOL)flag
+{
+    isUserLocationAnnotation = flag;
 }
 
 #pragma mark -

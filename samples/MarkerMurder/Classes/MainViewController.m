@@ -137,8 +137,8 @@
     mapView.clusterMarkerSize = clusterMarkerImage.size;
     mapView.clusterAreaSize = CGSizeMake(clusterMarkerImage.size.width * 1.25, clusterMarkerImage.size.height * 1.25);
 
-	center.latitude = 47.5635;
-	center.longitude = 10.20981;
+    center.latitude = 47.5635;
+    center.longitude = 10.20981;
 
 //    int zoneNumber;
 //    BOOL isNorthernHemisphere;
@@ -166,11 +166,12 @@
 
 //    [mapView zoomWithLatitudeLongitudeBoundsSouthWest:CLLocationCoordinate2DMake(47.5, 10.15) northEast:CLLocationCoordinate2DMake(47.6, 10.25) animated:NO];
 
-	[mapView setZoom:10.0];
-	[mapView setCenterCoordinate:center animated:NO];
+    [mapView setZoom:10.0];
+    [mapView setCenterCoordinate:center animated:NO];
+    mapView.showsUserLocation = YES;
 
-	[self updateInfo];
-	[self performSelector:@selector(addMarkers) withObject:nil afterDelay:0.5];
+    [self updateInfo];
+    [self performSelector:@selector(addMarkers) withObject:nil afterDelay:0.5];
 
 //    // Tile bounding box
 //    RMSphericalTrapezium tileBoundingBox = [mapView latitudeLongitudeBoundingBoxForTile:RMTileMake(541, 357, 10)];
@@ -217,7 +218,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	RMLog(@"didReceiveMemoryWarning %@", self);
+    RMLog(@"didReceiveMemoryWarning %@", self);
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
@@ -266,7 +267,13 @@
 
 - (void)afterMapZoom:(RMMapView *)map
 {
-	[self updateInfo];
+    [self updateInfo];
+}
+
+// Don't use this delegate method for long running tasks since it blocks the main thread - use #afterMapMove or #afterMapZoom instead
+- (void)mapViewRegionDidChange:(RMMapView *)mapView
+{
+    [self updateInfo];
 }
 
 - (BOOL)mapView:(RMMapView *)map shouldDragAnnotation:(RMAnnotation *)annotation
@@ -310,7 +317,7 @@
     RMProjectedPoint projectedPoint = [map pixelToProjectedPoint:point];
     CLLocationCoordinate2D coordinates =  [map pixelToCoordinate:point];
 
-	NSLog(@"Clicked on Map - Location: x:%lf y:%lf, Projected east:%f north:%f, Coordinate lat:%f lon:%f", point.x, point.y, projectedPoint.x, projectedPoint.y, coordinates.latitude, coordinates.longitude);
+    NSLog(@"Clicked on Map - Location: x:%lf y:%lf, Projected east:%f north:%f, Coordinate lat:%f lon:%f", point.x, point.y, projectedPoint.x, projectedPoint.y, coordinates.latitude, coordinates.longitude);
 }
 
 - (void)tapOnAnnotation:(RMAnnotation *)annotation onMap:(RMMapView *)map

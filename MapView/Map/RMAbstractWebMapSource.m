@@ -28,9 +28,11 @@
 #import "RMAbstractWebMapSource.h"
 #import "RMTileCache.h"
 
+#define HTTP_404_NOT_FOUND 404
+
 @implementation RMAbstractWebMapSource
 
-@synthesize retryCount, waitSeconds;
+@synthesize retryCount, requestTimeoutSeconds;
 
 - (id)init
 {
@@ -38,7 +40,7 @@
         return nil;
 
     self.retryCount = RMAbstractWebMapSourceDefaultRetryCount;
-    self.waitSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
+    self.requestTimeoutSeconds = RMAbstractWebMapSourceDefaultWaitSeconds;
 
     return self;
 }
@@ -96,7 +98,7 @@
                 for (NSUInteger try = 0; tileData == nil && try < self.retryCount; ++try)
                 {
                     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:currentURL];
-                    [request setTimeoutInterval:(self.waitSeconds / (CGFloat)self.retryCount)];
+                    [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
                     tileData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
                 }
 
@@ -114,7 +116,7 @@
 
         // wait for whole group of fetches (with retries) to finish, then clean up
         //
-        dispatch_group_wait(fetchGroup, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * self.waitSeconds));
+        dispatch_group_wait(fetchGroup, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * self.requestTimeoutSeconds));
         dispatch_release(fetchGroup);
 
         // composite the collected images together
@@ -143,12 +145,16 @@
     {
         for (NSUInteger try = 0; image == nil && try < self.retryCount; ++try)
         {
+            NSHTTPURLResponse *response = nil;
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[URLs objectAtIndex:0]];
-            [request setTimeoutInterval:self.waitSeconds];
-            image = [UIImage imageWithData:[NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil]];
+            [request setTimeoutInterval:(self.requestTimeoutSeconds / (CGFloat)self.retryCount)];
+            image = [UIImage imageWithData:[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:nil]];
+
+            if (response.statusCode == HTTP_404_NOT_FOUND)
+                break;
         }
     }
-    
+
     if (image)
         [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
 
