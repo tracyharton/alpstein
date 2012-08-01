@@ -151,13 +151,13 @@
     CGPoint _lastDraggingTranslation;
     RMAnnotation *_draggedAnnotation;
 
-    CLLocationManager *locationManager;
-    RMUserLocation *userLocation;
-    BOOL showsUserLocation;
-    RMUserTrackingMode userTrackingMode;
+    CLLocationManager *_locationManager;
+    RMUserLocation *_userLocation;
+    BOOL _showsUserLocation;
+    RMUserTrackingMode _userTrackingMode;
 
-    UIImageView *userLocationTrackingView;
-    UIImageView *userHeadingTrackingView;
+    UIImageView *_userLocationTrackingView;
+    UIImageView *_userHeadingTrackingView;
 }
 
 @synthesize decelerationMode = _decelerationMode;
@@ -172,7 +172,7 @@
 @synthesize positionClusterMarkersAtTheGravityCenter = _positionClusterMarkersAtTheGravityCenter;
 @synthesize clusterMarkerSize = _clusterMarkerSize, clusterAreaSize = _clusterAreaSize;
 @synthesize adjustTilesForRetinaDisplay = _adjustTilesForRetinaDisplay;
-@synthesize userLocation, showsUserLocation, userTrackingMode;
+@synthesize userLocation = _userLocation, showsUserLocation = _showsUserLocation, userTrackingMode = _userTrackingMode;
 @synthesize missingTilesDepth = _missingTilesDepth;
 @synthesize debugTiles = _debugTiles;
 
@@ -350,10 +350,10 @@
     [_projection release]; _projection = nil;
     [_mercatorToTileProjection release]; _mercatorToTileProjection = nil;
     [self setTileCache:nil];
-    [locationManager release]; locationManager = nil;
-    [userLocation release]; userLocation = nil;
-    [userLocationTrackingView release]; userLocationTrackingView = nil;
-    [userHeadingTrackingView release]; userHeadingTrackingView = nil;
+    [_locationManager release]; _locationManager = nil;
+    [_userLocation release]; _userLocation = nil;
+    [_userLocationTrackingView release]; _userLocationTrackingView = nil;
+    [_userHeadingTrackingView release]; _userHeadingTrackingView = nil;
     [super dealloc];
 }
 
@@ -2440,10 +2440,10 @@
 
 - (void)setShowsUserLocation:(BOOL)newShowsUserLocation
 {
-    if (newShowsUserLocation == showsUserLocation)
+    if (newShowsUserLocation == _showsUserLocation)
         return;
 
-    showsUserLocation = newShowsUserLocation;
+    _showsUserLocation = newShowsUserLocation;
 
     if (newShowsUserLocation)
     {
@@ -2452,18 +2452,18 @@
 
         self.userLocation = [RMUserLocation annotationWithMapView:self coordinate:CLLocationCoordinate2DMake(0, 0) andTitle:nil];
 
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.headingFilter = 5;
-        locationManager.delegate = self;
-        [locationManager startUpdatingLocation];
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.headingFilter = 5;
+        _locationManager.delegate = self;
+        [_locationManager startUpdatingLocation];
     }
     else
     {
-        [locationManager stopUpdatingLocation];
-        [locationManager stopUpdatingHeading];
-        locationManager.delegate = nil;
-        [locationManager release];
-        locationManager = nil;
+        [_locationManager stopUpdatingLocation];
+        [_locationManager stopUpdatingHeading];
+        _locationManager.delegate = nil;
+        [_locationManager release];
+        _locationManager = nil;
 
         if (_delegateHasDidStopLocatingUser)
             [_delegate mapViewDidStopLocatingUser:self];
@@ -2489,23 +2489,23 @@
 
 - (void)setUserLocation:(RMUserLocation *)newUserLocation
 {
-    if ( ! [newUserLocation isEqual:userLocation])
+    if ( ! [newUserLocation isEqual:_userLocation])
     {
-        [userLocation release];
-        userLocation = [newUserLocation retain];
+        [_userLocation release];
+        _userLocation = [newUserLocation retain];
     }
 }
 
 - (BOOL)isUserLocationVisible
 {
-    if (userLocation)
+    if (_userLocation)
     {
-        CGPoint locationPoint = [self mapPositionForAnnotation:userLocation];
+        CGPoint locationPoint = [self mapPositionForAnnotation:_userLocation];
 
-        CGRect locationRect = CGRectMake(locationPoint.x - userLocation.location.horizontalAccuracy,
-                                         locationPoint.y - userLocation.location.horizontalAccuracy,
-                                         userLocation.location.horizontalAccuracy * 2,
-                                         userLocation.location.horizontalAccuracy * 2);
+        CGRect locationRect = CGRectMake(locationPoint.x - _userLocation.location.horizontalAccuracy,
+                                         locationPoint.y - _userLocation.location.horizontalAccuracy,
+                                         _userLocation.location.horizontalAccuracy * 2,
+                                         _userLocation.location.horizontalAccuracy * 2);
 
         return CGRectIntersectsRect([self bounds], locationRect);
     }
@@ -2520,17 +2520,17 @@
 
 - (void)setUserTrackingMode:(RMUserTrackingMode)mode animated:(BOOL)animated
 {
-    if (mode == userTrackingMode)
+    if (mode == _userTrackingMode)
         return;
 
-    userTrackingMode = mode;
+    _userTrackingMode = mode;
 
-    switch (userTrackingMode)
+    switch (_userTrackingMode)
     {
         case RMUserTrackingModeNone:
         default:
         {
-            [locationManager stopUpdatingHeading];
+            [_locationManager stopUpdatingHeading];
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
                                   delay:0.0
@@ -2545,15 +2545,15 @@
                              }
                              completion:nil];
 
-            if (userLocationTrackingView || userHeadingTrackingView)
+            if (_userLocationTrackingView || _userHeadingTrackingView)
             {
-                [userLocationTrackingView removeFromSuperview];
-                userLocationTrackingView = nil;
-                [userHeadingTrackingView removeFromSuperview];
-                userHeadingTrackingView = nil;
+                [_userLocationTrackingView removeFromSuperview];
+                _userLocationTrackingView = nil;
+                [_userHeadingTrackingView removeFromSuperview];
+                _userHeadingTrackingView = nil;
             }
 
-            userLocation.layer.hidden = NO;
+            _userLocation.layer.hidden = NO;
 
             break;
         }
@@ -2561,17 +2561,17 @@
         {
             self.showsUserLocation = YES;
 
-            [locationManager stopUpdatingHeading];
+            [_locationManager stopUpdatingHeading];
 
             if (self.userLocation)
-                [self locationManager:locationManager didUpdateToLocation:self.userLocation.location fromLocation:self.userLocation.location];
+                [self locationManager:_locationManager didUpdateToLocation:self.userLocation.location fromLocation:self.userLocation.location];
 
-            if (userLocationTrackingView || userHeadingTrackingView)
+            if (_userLocationTrackingView || _userHeadingTrackingView)
             {
-                [userLocationTrackingView removeFromSuperview];
-                userLocationTrackingView = nil;
-                [userHeadingTrackingView removeFromSuperview];
-                userHeadingTrackingView = nil;
+                [_userLocationTrackingView removeFromSuperview];
+                _userLocationTrackingView = nil;
+                [_userHeadingTrackingView removeFromSuperview];
+                _userHeadingTrackingView = nil;
             }
 
             [UIView animateWithDuration:(animated ? 0.5 : 0.0)
@@ -2587,7 +2587,7 @@
                              }
                              completion:nil];
 
-            userLocation.layer.hidden = NO;
+            _userLocation.layer.hidden = NO;
 
             break;
         }
@@ -2595,63 +2595,63 @@
         {
             self.showsUserLocation = YES;
 
-            userLocation.layer.hidden = YES;
+            _userLocation.layer.hidden = YES;
 
-            userHeadingTrackingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HeadingAngleSmall.png"]];
+            _userHeadingTrackingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HeadingAngleSmall.png"]];
 
-            userHeadingTrackingView.center = CGPointMake(round([self bounds].size.width  / 2), 
-                                                         round([self bounds].size.height / 2) - (userHeadingTrackingView.bounds.size.height / 2) - 4);
+            _userHeadingTrackingView.center = CGPointMake(round([self bounds].size.width  / 2),
+                                                          round([self bounds].size.height / 2) - (_userHeadingTrackingView.bounds.size.height / 2) - 4);
 
-            userHeadingTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
-                                                       UIViewAutoresizingFlexibleRightMargin |
-                                                       UIViewAutoresizingFlexibleTopMargin   |
-                                                       UIViewAutoresizingFlexibleBottomMargin;
-
-            userHeadingTrackingView.alpha = 0.0;
-
-            [self addSubview:userHeadingTrackingView];
-
-            [UIView animateWithDuration:0.5 animations:^(void) { userHeadingTrackingView.alpha = 1.0; }];
-
-            userLocationTrackingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TrackingDot.png"]];
-
-            userLocationTrackingView.center = CGPointMake(round([self bounds].size.width  / 2), 
-                                                          round([self bounds].size.height / 2));
-
-            userLocationTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
+            _userHeadingTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
                                                         UIViewAutoresizingFlexibleRightMargin |
                                                         UIViewAutoresizingFlexibleTopMargin   |
                                                         UIViewAutoresizingFlexibleBottomMargin;
+
+            _userHeadingTrackingView.alpha = 0.0;
+
+            [self addSubview:_userHeadingTrackingView];
+
+            [UIView animateWithDuration:0.5 animations:^(void) { _userHeadingTrackingView.alpha = 1.0; }];
+
+            _userLocationTrackingView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TrackingDot.png"]];
+
+            _userLocationTrackingView.center = CGPointMake(round([self bounds].size.width  / 2),
+                                                          round([self bounds].size.height / 2));
+
+            _userLocationTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
+                                                         UIViewAutoresizingFlexibleRightMargin |
+                                                         UIViewAutoresizingFlexibleTopMargin   |
+                                                         UIViewAutoresizingFlexibleBottomMargin;
             
-            [self addSubview:userLocationTrackingView];
+            [self addSubview:_userLocationTrackingView];
 
             if (self.zoom < 3)
                 [self zoomByFactor:exp2f(3 - [self zoom]) near:self.center animated:YES];
 
             if (self.userLocation)
-                [self locationManager:locationManager didUpdateToLocation:self.userLocation.location fromLocation:self.userLocation.location];
+                [self locationManager:_locationManager didUpdateToLocation:self.userLocation.location fromLocation:self.userLocation.location];
 
-            [locationManager startUpdatingHeading];
+            [_locationManager startUpdatingHeading];
 
             break;
         }
     }
 
     if (_delegateHasDidChangeUserTrackingMode)
-        [_delegate mapView:self didChangeUserTrackingMode:userTrackingMode animated:animated];
+        [_delegate mapView:self didChangeUserTrackingMode:_userTrackingMode animated:animated];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
-    if ( ! showsUserLocation || _mapScrollView.isDragging)
+    if ( ! _showsUserLocation || _mapScrollView.isDragging)
         return;
 
     if ([newLocation distanceFromLocation:oldLocation])
     {
-        userLocation.location = newLocation;
+        _userLocation.location = newLocation;
 
         if (_delegateHasDidUpdateUserLocation)
-            [_delegate mapView:self didUpdateUserLocation:userLocation];
+            [_delegate mapView:self didUpdateUserLocation:_userLocation];
     }
 
     if (self.userTrackingMode != RMUserTrackingModeNone)
@@ -2659,7 +2659,7 @@
         // zoom centered on user location unless we're already centered there (or very close)
         //
         CGPoint mapCenterPoint    = [self convertPoint:self.center fromView:self.superview];
-        CGPoint userLocationPoint = [self mapPositionForAnnotation:userLocation];
+        CGPoint userLocationPoint = [self mapPositionForAnnotation:_userLocation];
 
         if (fabsf(userLocationPoint.x - mapCenterPoint.x) > 2 || fabsf(userLocationPoint.y - mapCenterPoint.y > 2))
         {
@@ -2762,14 +2762,14 @@
     if ([newLocation distanceFromLocation:oldLocation])
         trackingHaloAnnotation.coordinate = newLocation.coordinate;
 
-    userLocation.layer.hidden = ((trackingHaloAnnotation.coordinate.latitude == 0 && trackingHaloAnnotation.coordinate.longitude == 0) || self.userTrackingMode == RMUserTrackingModeFollowWithHeading);
+    _userLocation.layer.hidden = ((trackingHaloAnnotation.coordinate.latitude == 0 && trackingHaloAnnotation.coordinate.longitude == 0) || self.userTrackingMode == RMUserTrackingModeFollowWithHeading);
 
     accuracyCircleAnnotation.layer.hidden = newLocation.horizontalAccuracy <= 10;
 
     trackingHaloAnnotation.layer.hidden = ((trackingHaloAnnotation.coordinate.latitude == 0 && trackingHaloAnnotation.coordinate.longitude == 0) || newLocation.horizontalAccuracy > 10);
 
-    if ( ! [_annotations containsObject:userLocation])
-        [self addAnnotation:userLocation];
+    if ( ! [_annotations containsObject:_userLocation])
+        [self addAnnotation:_userLocation];
 }
 
 - (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager
@@ -2779,13 +2779,13 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
-    if ( ! showsUserLocation || _mapScrollView.isDragging)
+    if ( ! _showsUserLocation || _mapScrollView.isDragging)
         return;
 
-    userLocation.heading = newHeading;
+    _userLocation.heading = newHeading;
 
     if (_delegateHasDidUpdateUserLocation)
-        [_delegate mapView:self didUpdateUserLocation:userLocation];
+        [_delegate mapView:self didUpdateUserLocation:_userLocation];
 
     if (newHeading.trueHeading != 0 && self.userTrackingMode == RMUserTrackingModeFollowWithHeading)
     {

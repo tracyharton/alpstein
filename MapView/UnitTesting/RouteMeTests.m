@@ -181,14 +181,14 @@
 	STAssertGreaterThan(columnSpacing, 0.0, @"this test requires positive columnSpacing");
 
 	RMMarkerManager *mangler = [[mapView contents] markerManager];
-	
+
 	[[mapView contents] moveBy:CGSizeMake(-5.0, 0.0)];
 #ifdef DEBUG
 	RMSphericalTrapezium screenLimitsDegrees = [[mapView contents] latitudeLongitudeBoundingBox];
 	RMLog(@"screen limits west: %4.1f east %4.1f", screenLimitsDegrees.southwest.longitude, screenLimitsDegrees.northeast.longitude);
 	RMLog(@"screen limits south: %4.1f north %4.1f", screenLimitsDegrees.southwest.latitude, screenLimitsDegrees.northeast.latitude);
 #endif
-	
+
 	for (j = 1; j < nColumns; j++) {
 		RMMarker *leftMarker = [testMarkers objectAtIndex:j - 1];
 		RMMarker *rightMarker = [testMarkers objectAtIndex:j];
