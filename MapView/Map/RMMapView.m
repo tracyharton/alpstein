@@ -2541,10 +2541,7 @@
                                  _overlayView.transform   = CGAffineTransformIdentity;
                                  
                                  for (RMAnnotation *annotation in _annotations)
-                                 {
-                                     if ( ! annotation.isUserLocationAnnotation)
-                                         annotation.layer.transform = CATransform3DIdentity;
-                                 }
+                                     annotation.layer.transform = CATransform3DIdentity;
                              }
                              completion:nil];
 
@@ -2586,10 +2583,7 @@
                                  _overlayView.transform   = CGAffineTransformIdentity;
 
                                  for (RMAnnotation *annotation in _annotations)
-                                 {
-                                     if ( ! annotation.isUserLocationAnnotation)
-                                         annotation.layer.transform = CATransform3DIdentity;
-                                 }
+                                     annotation.layer.transform = CATransform3DIdentity;
                              }
                              completion:nil];
 
@@ -2608,6 +2602,11 @@
             userHeadingTrackingView.center = CGPointMake(round([self bounds].size.width  / 2), 
                                                          round([self bounds].size.height / 2) - (userHeadingTrackingView.bounds.size.height / 2) - 4);
 
+            userHeadingTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
+                                                       UIViewAutoresizingFlexibleRightMargin |
+                                                       UIViewAutoresizingFlexibleTopMargin   |
+                                                       UIViewAutoresizingFlexibleBottomMargin;
+
             userHeadingTrackingView.alpha = 0.0;
 
             [self addSubview:userHeadingTrackingView];
@@ -2619,6 +2618,11 @@
             userLocationTrackingView.center = CGPointMake(round([self bounds].size.width  / 2), 
                                                           round([self bounds].size.height / 2));
 
+            userLocationTrackingView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin  |
+                                                        UIViewAutoresizingFlexibleRightMargin |
+                                                        UIViewAutoresizingFlexibleTopMargin   |
+                                                        UIViewAutoresizingFlexibleBottomMargin;
+            
             [self addSubview:userLocationTrackingView];
 
             if (self.zoom < 3)
@@ -2800,10 +2804,8 @@
                              _overlayView.transform   = CGAffineTransformMakeRotation(angle);
 
                              for (RMAnnotation *annotation in _annotations)
-                             {
-                                 if ( ! annotation.isUserLocationAnnotation)
+                                 if ([annotation.layer isKindOfClass:[RMMarker class]] && ! annotation.isUserLocationAnnotation)
                                      annotation.layer.transform = CATransform3DMakeAffineTransform(CGAffineTransformMakeRotation(-angle));
-                             }
                          }
                          completion:nil];
 
