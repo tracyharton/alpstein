@@ -52,6 +52,7 @@ typedef enum : short {
 
 // removes all tile images from the memory and disk subcaches
 - (void)removeAllCachedImages;
+- (void)removeAllCachedImagesForCacheKey:(NSString *)cacheKey;
 
 @end
 
