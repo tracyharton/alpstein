@@ -81,7 +81,7 @@ static double coordinateGridSpacingDecimal[19] = {
 @synthesize gridColor = _gridColor;
 @synthesize gridLineWidth = _gridLineWidth;
 @synthesize gridLabelInterval = _gridLabelInterval;
-@synthesize gridMode = _labelingMode;
+@synthesize gridMode = _gridMode;
 @synthesize minorLabelColor = _minorLabelColor;
 @synthesize minorLabelFont = _minorLabelFont;
 @synthesize majorLabelColor = _majorLabelColor;
@@ -94,6 +94,8 @@ static double coordinateGridSpacingDecimal[19] = {
 
     self.minZoom = 5;
     self.maxZoom = 18;
+
+    self.opaque = NO;
 
     self.gridColor = [UIColor colorWithWhite:0.1 alpha:0.6];
     self.gridLineWidth = 2.0;

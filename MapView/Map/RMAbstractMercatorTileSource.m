@@ -35,7 +35,7 @@
     RMFractalTileProjection *_tileProjection;
 }
 
-@synthesize minZoom = _minZoom, maxZoom = _maxZoom;
+@synthesize minZoom = _minZoom, maxZoom = _maxZoom, cacheable = _cacheable, opaque = _opaque;
 
 - (id)init
 {
@@ -47,6 +47,9 @@
     // http://wiki.openstreetmap.org/index.php/FAQ#What_is_the_map_scale_for_a_particular_zoom_level_of_the_map.3F
     self.minZoom = kDefaultMinTileZoom;
     self.maxZoom = kDefaultMaxTileZoom;
+
+    self.cacheable = YES;
+    self.opaque = YES;
 
     return self;
 }
