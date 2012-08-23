@@ -316,7 +316,29 @@ static double coordinateGridSpacingDecimal[19] = {
 
 - (NSString *)uniqueTilecacheKey
 {
-    return @"RMCoordinateGrid";
+    NSString *tileCacheKey = nil;
+
+    switch (self.gridMode)
+    {
+        case GridModeGeographic: {
+            tileCacheKey = @"RMCoordinateGridGeographic";
+            break;
+        }
+        case GridModeGeographicDecimal:
+        {
+            tileCacheKey = @"RMCoordinateGridDecimal";
+            break;
+        }
+        case GridModeUTM: {
+            tileCacheKey = @"RMCoordinateGridUTM";
+            break;
+        }
+    }
+
+    if ( ! tileCacheKey)
+        tileCacheKey = @"RMCoordinateGrid";
+
+    return tileCacheKey;
 }
 
 - (NSString *)shortName
