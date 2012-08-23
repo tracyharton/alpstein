@@ -46,6 +46,9 @@
 @property (nonatomic, assign) float minZoom;
 @property (nonatomic, assign) float maxZoom;
 
+@property (nonatomic, assign, getter = isCacheable) BOOL cacheable;
+@property (nonatomic, assign, getter = isOpaque) BOOL opaque;
+
 @property (nonatomic, readonly) RMFractalTileProjection *mercatorToTileProjection;
 @property (nonatomic, readonly) RMProjection *projection;
 

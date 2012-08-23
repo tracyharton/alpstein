@@ -62,10 +62,14 @@
     __block UIImage *image = nil;
 
 	tile = [[self mercatorToTileProjection] normaliseTile:tile];
-    image = [tileCache cachedImage:tile withCacheKey:[self uniqueTilecacheKey]];
 
-    if (image)
-        return image;
+    if (self.isCacheable)
+    {
+        image = [tileCache cachedImage:tile withCacheKey:[self uniqueTilecacheKey]];
+
+        if (image)
+            return image;
+    }
 
     dispatch_async(dispatch_get_main_queue(), ^(void)
     {
@@ -155,7 +159,7 @@
         }
     }
 
-    if (image)
+    if (image && self.isCacheable)
         [tileCache addImage:image forTile:tile withCacheKey:[self uniqueTilecacheKey]];
 
     [tileCache release];
