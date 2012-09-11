@@ -12,6 +12,8 @@
 #import "RMTileSource.h"
 #import "RMTileImage.h"
 
+#define IS_VALID_TILE_IMAGE(image) (image != nil && [image isKindOfClass:[UIImage class]])
+
 @implementation RMMapTiledLayerView
 {
     RMMapView *_mapView;
@@ -97,7 +99,9 @@
                 for (int y=y1; y<=y2; ++y)
                 {
                     UIImage *tileImage = [_tileSource imageForTile:RMTileMake(x, y, zoom) inCache:[_mapView tileCache]];
-                    [tileImage drawInRect:CGRectMake(x * rectSize, y * rectSize, rectSize, rectSize)];
+
+                    if (IS_VALID_TILE_IMAGE(tileImage))
+                        [tileImage drawInRect:CGRectMake(x * rectSize, y * rectSize, rectSize, rectSize)];
                 }
             }
 
@@ -138,7 +142,7 @@
 
                     tileImage = [_tileSource imageForTile:RMTileMake((int)nextTileX, (int)nextTileY, currentZoom) inCache:[_mapView tileCache]];
 
-                    if (tileImage)
+                    if (IS_VALID_TILE_IMAGE(tileImage))
                     {
                         // crop
                         float cropSize = 1.0 / powf(2.0, (float)currentTileDepth);
@@ -154,6 +158,10 @@
 
                         break;
                     }
+                    else
+                    {
+                        tileImage = nil;
+                    }
 
                     currentTileDepth++;
                     currentZoom = zoom - currentTileDepth;
@@ -161,40 +169,43 @@
             }
         }
 
-        if (_mapView.debugTiles)
+        if (IS_VALID_TILE_IMAGE(tileImage))
         {
-            UIGraphicsBeginImageContext(tileImage.size);
+            if (_mapView.debugTiles)
+            {
+                UIGraphicsBeginImageContext(tileImage.size);
 
-            CGContextRef debugContext = UIGraphicsGetCurrentContext();
+                CGContextRef debugContext = UIGraphicsGetCurrentContext();
 
-            CGRect debugRect = CGRectMake(0, 0, tileImage.size.width, tileImage.size.height);
+                CGRect debugRect = CGRectMake(0, 0, tileImage.size.width, tileImage.size.height);
 
-            [tileImage drawInRect:debugRect];
+                [tileImage drawInRect:debugRect];
 
-            UIFont *font = [UIFont systemFontOfSize:32.0];
+                UIFont *font = [UIFont systemFontOfSize:32.0];
 
-            CGContextSetStrokeColorWithColor(debugContext, [UIColor whiteColor].CGColor);
-            CGContextSetLineWidth(debugContext, 2.0);
-            CGContextSetShadowWithColor(debugContext, CGSizeMake(0.0, 0.0), 5.0, [UIColor blackColor].CGColor);
+                CGContextSetStrokeColorWithColor(debugContext, [UIColor whiteColor].CGColor);
+                CGContextSetLineWidth(debugContext, 2.0);
+                CGContextSetShadowWithColor(debugContext, CGSizeMake(0.0, 0.0), 5.0, [UIColor blackColor].CGColor);
 
-            CGContextStrokeRect(debugContext, debugRect);
+                CGContextStrokeRect(debugContext, debugRect);
 
-            CGContextSetFillColorWithColor(debugContext, [UIColor whiteColor].CGColor);
+                CGContextSetFillColorWithColor(debugContext, [UIColor whiteColor].CGColor);
 
-            NSString *debugString = [NSString stringWithFormat:@"Zoom %d", zoom];
-            CGSize debugSize1 = [debugString sizeWithFont:font];
-            [debugString drawInRect:CGRectMake(5.0, 5.0, debugSize1.width, debugSize1.height) withFont:font];
+                NSString *debugString = [NSString stringWithFormat:@"Zoom %d", zoom];
+                CGSize debugSize1 = [debugString sizeWithFont:font];
+                [debugString drawInRect:CGRectMake(5.0, 5.0, debugSize1.width, debugSize1.height) withFont:font];
 
-            debugString = [NSString stringWithFormat:@"(%d, %d)", x, y];
-            CGSize debugSize2 = [debugString sizeWithFont:font];
-            [debugString drawInRect:CGRectMake(5.0, 5.0 + debugSize1.height + 5.0, debugSize2.width, debugSize2.height) withFont:font];
+                debugString = [NSString stringWithFormat:@"(%d, %d)", x, y];
+                CGSize debugSize2 = [debugString sizeWithFont:font];
+                [debugString drawInRect:CGRectMake(5.0, 5.0 + debugSize1.height + 5.0, debugSize2.width, debugSize2.height) withFont:font];
 
-            tileImage = UIGraphicsGetImageFromCurrentImageContext();
+                tileImage = UIGraphicsGetImageFromCurrentImageContext();
 
-            UIGraphicsEndImageContext();
+                UIGraphicsEndImageContext();
+            }
+
+            [tileImage drawInRect:rect];
         }
-
-        [tileImage drawInRect:rect];
 
         UIGraphicsPopContext();
     }
