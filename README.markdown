@@ -18,8 +18,8 @@ MapBox users might be interested in the [MapBox fork][7], which includes lots of
    [7]: https://github.com/mapbox/mapbox-ios-sdk
 
 
-Installing
-----------
+Installation
+------------
 
 As Route-Me is undergoing some significant changes, the recommended course of action is to clone a copy of the repository:
 
@@ -30,6 +30,8 @@ Or, [download the trunk][dl].
 Then, update the submodules (only FMDB at the moment):
 
       git submodule update --init
+
+After this, copy or alias all the resources in the MapView/Map/Resources folder to your project.
 
 See the 'samples' subdirectory for usage examples.
 
