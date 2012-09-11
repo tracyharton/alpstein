@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		165315D415FF9349007EA6C0 /* HeadingAngleSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C415FF9349007EA6C0 /* HeadingAngleSmall.png */; };
+		165315D515FF9349007EA6C0 /* HeadingAngleSmall@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C515FF9349007EA6C0 /* HeadingAngleSmall@2x.png */; };
+		165315D615FF9349007EA6C0 /* LoadingTile.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C615FF9349007EA6C0 /* LoadingTile.png */; };
+		165315D715FF9349007EA6C0 /* LoadingTileZoom.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C715FF9349007EA6C0 /* LoadingTileZoom.png */; };
+		165315D815FF9349007EA6C0 /* marker-blue-withletter.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C815FF9349007EA6C0 /* marker-blue-withletter.png */; };
+		165315D915FF9349007EA6C0 /* marker-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315C915FF9349007EA6C0 /* marker-blue.png */; };
+		165315DA15FF9349007EA6C0 /* marker-red-withletter.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CA15FF9349007EA6C0 /* marker-red-withletter.png */; };
+		165315DB15FF9349007EA6C0 /* marker-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CB15FF9349007EA6C0 /* marker-red.png */; };
+		165315DC15FF9349007EA6C0 /* TrackingDot.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CC15FF9349007EA6C0 /* TrackingDot.png */; };
+		165315DD15FF9349007EA6C0 /* TrackingDot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CD15FF9349007EA6C0 /* TrackingDot@2x.png */; };
+		165315DE15FF9349007EA6C0 /* TrackingDotHalo.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CE15FF9349007EA6C0 /* TrackingDotHalo.png */; };
+		165315DF15FF9349007EA6C0 /* TrackingDotHalo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315CF15FF9349007EA6C0 /* TrackingDotHalo@2x.png */; };
+		165315E015FF9349007EA6C0 /* TrackingHeading.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315D015FF9349007EA6C0 /* TrackingHeading.png */; };
+		165315E115FF9349007EA6C0 /* TrackingHeading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315D115FF9349007EA6C0 /* TrackingHeading@2x.png */; };
+		165315E215FF9349007EA6C0 /* TrackingLocation.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315D215FF9349007EA6C0 /* TrackingLocation.png */; };
+		165315E315FF9349007EA6C0 /* TrackingLocation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 165315D315FF9349007EA6C0 /* TrackingLocation@2x.png */; };
+		165315E515FF9372007EA6C0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 165315E415FF9372007EA6C0 /* CoreLocation.framework */; };
 		16F357341585DB08003A3AD9 /* mpp.png in Resources */ = {isa = PBXBuildFile; fileRef = 16F357331585DB08003A3AD9 /* mpp.png */; };
 		1D3623260D0F684500981E51 /* ProgrammaticMapAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* ProgrammaticMapAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -40,6 +57,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		165315C415FF9349007EA6C0 /* HeadingAngleSmall.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HeadingAngleSmall.png; sourceTree = "<group>"; };
+		165315C515FF9349007EA6C0 /* HeadingAngleSmall@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HeadingAngleSmall@2x.png"; sourceTree = "<group>"; };
+		165315C615FF9349007EA6C0 /* LoadingTile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingTile.png; sourceTree = "<group>"; };
+		165315C715FF9349007EA6C0 /* LoadingTileZoom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoadingTileZoom.png; sourceTree = "<group>"; };
+		165315C815FF9349007EA6C0 /* marker-blue-withletter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-blue-withletter.png"; sourceTree = "<group>"; };
+		165315C915FF9349007EA6C0 /* marker-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-blue.png"; sourceTree = "<group>"; };
+		165315CA15FF9349007EA6C0 /* marker-red-withletter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-red-withletter.png"; sourceTree = "<group>"; };
+		165315CB15FF9349007EA6C0 /* marker-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "marker-red.png"; sourceTree = "<group>"; };
+		165315CC15FF9349007EA6C0 /* TrackingDot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackingDot.png; sourceTree = "<group>"; };
+		165315CD15FF9349007EA6C0 /* TrackingDot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TrackingDot@2x.png"; sourceTree = "<group>"; };
+		165315CE15FF9349007EA6C0 /* TrackingDotHalo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackingDotHalo.png; sourceTree = "<group>"; };
+		165315CF15FF9349007EA6C0 /* TrackingDotHalo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TrackingDotHalo@2x.png"; sourceTree = "<group>"; };
+		165315D015FF9349007EA6C0 /* TrackingHeading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackingHeading.png; sourceTree = "<group>"; };
+		165315D115FF9349007EA6C0 /* TrackingHeading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TrackingHeading@2x.png"; sourceTree = "<group>"; };
+		165315D215FF9349007EA6C0 /* TrackingLocation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackingLocation.png; sourceTree = "<group>"; };
+		165315D315FF9349007EA6C0 /* TrackingLocation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "TrackingLocation@2x.png"; sourceTree = "<group>"; };
+		165315E415FF9372007EA6C0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		16F357331585DB08003A3AD9 /* mpp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mpp.png; path = ../MarkerMurder/mpp.png; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* ProgrammaticMapAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgrammaticMapAppDelegate.h; sourceTree = "<group>"; };
@@ -65,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				165315E515FF9372007EA6C0 /* CoreLocation.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -87,6 +122,30 @@
 				28D7ACF70DDB3853001CB0EB /* ProgrammaticMapViewController.m */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		165315C315FF9349007EA6C0 /* RouteMe */ = {
+			isa = PBXGroup;
+			children = (
+				165315C415FF9349007EA6C0 /* HeadingAngleSmall.png */,
+				165315C515FF9349007EA6C0 /* HeadingAngleSmall@2x.png */,
+				165315C615FF9349007EA6C0 /* LoadingTile.png */,
+				165315C715FF9349007EA6C0 /* LoadingTileZoom.png */,
+				165315C815FF9349007EA6C0 /* marker-blue-withletter.png */,
+				165315C915FF9349007EA6C0 /* marker-blue.png */,
+				165315CA15FF9349007EA6C0 /* marker-red-withletter.png */,
+				165315CB15FF9349007EA6C0 /* marker-red.png */,
+				165315CC15FF9349007EA6C0 /* TrackingDot.png */,
+				165315CD15FF9349007EA6C0 /* TrackingDot@2x.png */,
+				165315CE15FF9349007EA6C0 /* TrackingDotHalo.png */,
+				165315CF15FF9349007EA6C0 /* TrackingDotHalo@2x.png */,
+				165315D015FF9349007EA6C0 /* TrackingHeading.png */,
+				165315D115FF9349007EA6C0 /* TrackingHeading@2x.png */,
+				165315D215FF9349007EA6C0 /* TrackingLocation.png */,
+				165315D315FF9349007EA6C0 /* TrackingLocation@2x.png */,
+			);
+			name = RouteMe;
+			path = ../../MapView/Map/Resources;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -122,6 +181,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				165315C315FF9349007EA6C0 /* RouteMe */,
 				2899E5210DE3E06400AC0155 /* ProgrammaticMapViewController.xib */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -133,12 +193,13 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2BE5B5030F7AF56F00EF8CC6 /* QuartzCore.framework */,
-				2BE5B5070F7AF58000EF8CC6 /* libsqlite3.dylib */,
 				2BE5B5090F7AF58900EF8CC6 /* CoreFoundation.framework */,
-				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
-				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
+				165315E415FF9372007EA6C0 /* CoreLocation.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				2BE5B5030F7AF56F00EF8CC6 /* QuartzCore.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				2BE5B5070F7AF58000EF8CC6 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -223,6 +284,22 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				2899E5220DE3E06400AC0155 /* ProgrammaticMapViewController.xib in Resources */,
 				16F357341585DB08003A3AD9 /* mpp.png in Resources */,
+				165315D415FF9349007EA6C0 /* HeadingAngleSmall.png in Resources */,
+				165315D515FF9349007EA6C0 /* HeadingAngleSmall@2x.png in Resources */,
+				165315D615FF9349007EA6C0 /* LoadingTile.png in Resources */,
+				165315D715FF9349007EA6C0 /* LoadingTileZoom.png in Resources */,
+				165315D815FF9349007EA6C0 /* marker-blue-withletter.png in Resources */,
+				165315D915FF9349007EA6C0 /* marker-blue.png in Resources */,
+				165315DA15FF9349007EA6C0 /* marker-red-withletter.png in Resources */,
+				165315DB15FF9349007EA6C0 /* marker-red.png in Resources */,
+				165315DC15FF9349007EA6C0 /* TrackingDot.png in Resources */,
+				165315DD15FF9349007EA6C0 /* TrackingDot@2x.png in Resources */,
+				165315DE15FF9349007EA6C0 /* TrackingDotHalo.png in Resources */,
+				165315DF15FF9349007EA6C0 /* TrackingDotHalo@2x.png in Resources */,
+				165315E015FF9349007EA6C0 /* TrackingHeading.png in Resources */,
+				165315E115FF9349007EA6C0 /* TrackingHeading@2x.png in Resources */,
+				165315E215FF9349007EA6C0 /* TrackingLocation.png in Resources */,
+				165315E315FF9349007EA6C0 /* TrackingLocation@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
