@@ -32,4 +32,6 @@
 
 - (id)initWithTileSources:(NSArray *)tileSources tileCacheKey:(NSString *)tileCacheKey;
 
+@property (nonatomic, readonly) NSArray *tileSources;
+
 @end
