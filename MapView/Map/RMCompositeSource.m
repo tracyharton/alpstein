@@ -80,6 +80,11 @@
     [super dealloc];
 }
 
+- (NSArray *)tileSources
+{
+    return [[_tileSources copy] autorelease];
+}
+
 - (NSString *)uniqueTilecacheKey
 {
     return _uniqueTilecacheKey;
