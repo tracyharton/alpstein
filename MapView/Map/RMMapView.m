@@ -181,9 +181,9 @@
 
 - (void)performInitializationWithTilesource:(id <RMTileSource>)newTilesource
                            centerCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
-                                  zoomLevel:(float)initialZoomLevel
-                               maxZoomLevel:(float)maxZoomLevel
-                               minZoomLevel:(float)minZoomLevel
+                                  zoomLevel:(float)initialTileSourceZoomLevel
+                               maxZoomLevel:(float)initialTileSourceMaxZoomLevel
+                               minZoomLevel:(float)initialTileSourceMinZoomLevel
                             backgroundImage:(UIImage *)backgroundImage
 {
     _constrainMovement = _enableBouncing = _zoomingInPivotsAroundCenter = NO;
@@ -224,11 +224,11 @@
     if (backgroundImage)
         self.backgroundView.layer.contents = (id)backgroundImage.CGImage;
 
-    if (minZoomLevel < newTilesource.minZoom) minZoomLevel = newTilesource.minZoom;
-    if (maxZoomLevel > newTilesource.maxZoom) maxZoomLevel = newTilesource.maxZoom;
-    [self setMinZoom:minZoomLevel];
-    [self setMaxZoom:maxZoomLevel];
-    [self setZoom:initialZoomLevel];
+    if (initialTileSourceMinZoomLevel < newTilesource.minZoom) initialTileSourceMinZoomLevel = newTilesource.minZoom;
+    if (initialTileSourceMaxZoomLevel > newTilesource.maxZoom) initialTileSourceMaxZoomLevel = newTilesource.maxZoom;
+    [self setTileSourcesMinZoom:initialTileSourceMinZoomLevel];
+    [self setTileSourcesMaxZoom:initialTileSourceMaxZoomLevel];
+    [self setTileSourcesZoom:initialTileSourceZoomLevel];
 
     [self setTileSource:newTilesource];
     [self setCenterCoordinate:initialCenterCoordinate animated:NO];
@@ -819,16 +819,13 @@
         self.userTrackingMode = RMUserTrackingModeNone;
     
     // Calculate rounded zoom
-    float newZoom = fmin(ceilf([self zoom]) + 0.99, [self maxZoom]);
-
-    if (newZoom == self.zoom)
-        return;
+    float newZoom = fmin(ceilf([self zoom]) + 1.01, [self maxZoom]);
 
     float factor = exp2f(newZoom - [self zoom]);
 
     if (factor > 2.25)
     {
-        newZoom = fmin(ceilf([self zoom]) - 0.01, [self maxZoom]);
+        newZoom = fmin(ceilf([self zoom]) + 0.01, [self maxZoom]);
         factor = exp2f(newZoom - [self zoom]);
     }
 
@@ -844,16 +841,13 @@
 - (void)zoomOutToNextNativeZoomAt:(CGPoint)pivot animated:(BOOL) animated
 {
     // Calculate rounded zoom
-    float newZoom = fmax(floorf([self zoom]) - 0.01, [self minZoom]);
-
-    if (newZoom == self.zoom)
-        return;
+    float newZoom = fmax(floorf([self zoom]) + 0.01, [self minZoom]);
 
     float factor = exp2f(newZoom - [self zoom]);
 
     if (factor > 0.75)
     {
-        newZoom = fmax(floorf([self zoom]) - 1.01, [self minZoom]);
+        newZoom = fmax(floorf([self zoom]) - 0.99, [self minZoom]);
         factor = exp2f(newZoom - [self zoom]);
     }
 
@@ -1605,8 +1599,8 @@
     else
         _constrainingProjectedBounds = _projection.planetBounds;
 
-    [self setMinZoom:_tileSourcesContainer.minZoom];
-    [self setMaxZoom:_tileSourcesContainer.maxZoom];
+    [self setTileSourcesMinZoom:_tileSourcesContainer.minZoom];
+    [self setTileSourcesMaxZoom:_tileSourcesContainer.maxZoom];
     [self setZoom:[self zoom]]; // setZoom clamps zoom level to min/max limits
 
     // Recreate the map layer
@@ -1645,8 +1639,8 @@
     else
         _constrainingProjectedBounds = _projection.planetBounds;
 
-    [self setMinZoom:_tileSourcesContainer.minZoom];
-    [self setMaxZoom:_tileSourcesContainer.maxZoom];
+    [self setTileSourcesMinZoom:_tileSourcesContainer.minZoom];
+    [self setTileSourcesMaxZoom:_tileSourcesContainer.maxZoom];
     [self setZoom:[self zoom]]; // setZoom clamps zoom level to min/max limits
 
     // Recreate the map layer
@@ -1868,6 +1862,9 @@
 
 - (void)setMinZoom:(float)newMinZoom
 {
+    if (newMinZoom < 0.0)
+        newMinZoom = 0.0;
+
     _minZoom = newMinZoom;
 
 //    RMLog(@"New minZoom:%f", newMinZoom);
@@ -1877,13 +1874,46 @@
     [self correctMinZoomScaleForBoundingMask];
 }
 
+- (float)tileSourcesMinZoom
+{
+    return self.tileSourcesContainer.minZoom;
+}
+
+- (void)setTileSourcesMinZoom:(float)tileSourcesMinZoom
+{
+    tileSourcesMinZoom = ceilf(tileSourcesMinZoom) - 0.99;
+
+    if ( ! self.adjustTilesForRetinaDisplay)
+        tileSourcesMinZoom -= 1.0;
+
+    [self setMinZoom:tileSourcesMinZoom];
+}
+
 - (void)setMaxZoom:(float)newMaxZoom
 {
+    if (newMaxZoom < 0.0)
+        newMaxZoom = 0.0;
+
     _maxZoom = newMaxZoom;
 
 //    RMLog(@"New maxZoom:%f", newMaxZoom);
 
     _mapScrollView.maximumZoomScale = exp2f(newMaxZoom);
+}
+
+- (float)tileSourcesMaxZoom
+{
+    return self.tileSourcesContainer.maxZoom;
+}
+
+- (void)setTileSourcesMaxZoom:(float)tileSourcesMaxZoom
+{
+    tileSourcesMaxZoom = floorf(tileSourcesMaxZoom);
+
+    if ( ! self.adjustTilesForRetinaDisplay)
+        tileSourcesMaxZoom -= 1.0;
+
+    [self setMaxZoom:tileSourcesMaxZoom];
 }
 
 - (float)zoom
@@ -1897,9 +1927,29 @@
     _zoom = (newZoom > _maxZoom) ? _maxZoom : newZoom;
     _zoom = (_zoom < _minZoom) ? _minZoom : _zoom;
 
-//    RMLog(@"New zoom:%f", zoom);
+//    RMLog(@"New zoom:%f", _zoom);
 
     _mapScrollView.zoomScale = exp2f(_zoom);
+}
+
+- (float)tileSourcesZoom
+{
+    float zoom = ceilf(_zoom);
+
+    if ( ! self.adjustTilesForRetinaDisplay)
+        zoom += 1.0;
+
+    return zoom;
+}
+
+- (void)setTileSourcesZoom:(float)tileSourcesZoom
+{
+    tileSourcesZoom = floorf(tileSourcesZoom) - 0.99;
+
+    if ( ! self.adjustTilesForRetinaDisplay)
+        tileSourcesZoom -= 1.0;
+
+    [self setZoom:tileSourcesZoom];
 }
 
 - (void)setEnableClustering:(BOOL)doEnableClustering

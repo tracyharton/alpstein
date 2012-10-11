@@ -106,9 +106,9 @@ typedef enum : NSUInteger {
 - (id)initWithFrame:(CGRect)frame
       andTilesource:(id <RMTileSource>)newTilesource
    centerCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
-          zoomLevel:(float)initialZoomLevel
-       maxZoomLevel:(float)maxZoomLevel
-       minZoomLevel:(float)minZoomLevel
+          zoomLevel:(float)initialTileSourceZoomLevel
+       maxZoomLevel:(float)initialTileSourceMaxZoomLevel
+       minZoomLevel:(float)initialTileSourceMinZoomLevel
     backgroundImage:(UIImage *)backgroundImage;
 
 - (void)setFrame:(CGRect)frame;
@@ -132,6 +132,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) float zoom;
 @property (nonatomic, assign) float minZoom;
 @property (nonatomic, assign) float maxZoom;
+
+@property (nonatomic, assign) float tileSourcesZoom;
+@property (nonatomic, assign) float tileSourcesMinZoom;
+@property (nonatomic, assign) float tileSourcesMaxZoom;
 
 @property (nonatomic, assign) RMProjectedRect projectedBounds;
 @property (nonatomic, readonly) RMProjectedPoint projectedOrigin;
