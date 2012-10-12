@@ -819,13 +819,13 @@
         self.userTrackingMode = RMUserTrackingModeNone;
     
     // Calculate rounded zoom
-    float newZoom = fmin(ceilf([self zoom]) + 1.01, [self maxZoom]);
+    float newZoom = fmin(ceilf([self zoom]) + 1.0, [self maxZoom]);
 
     float factor = exp2f(newZoom - [self zoom]);
 
     if (factor > 2.25)
     {
-        newZoom = fmin(ceilf([self zoom]) + 0.01, [self maxZoom]);
+        newZoom = fmin(ceilf([self zoom]), [self maxZoom]);
         factor = exp2f(newZoom - [self zoom]);
     }
 
@@ -841,13 +841,13 @@
 - (void)zoomOutToNextNativeZoomAt:(CGPoint)pivot animated:(BOOL) animated
 {
     // Calculate rounded zoom
-    float newZoom = fmax(floorf([self zoom]) + 0.01, [self minZoom]);
+    float newZoom = fmax(floorf([self zoom]), [self minZoom]);
 
     float factor = exp2f(newZoom - [self zoom]);
 
     if (factor > 0.75)
     {
-        newZoom = fmax(floorf([self zoom]) - 0.99, [self minZoom]);
+        newZoom = fmax(floorf([self zoom]) - 1.0, [self minZoom]);
         factor = exp2f(newZoom - [self zoom]);
     }
 
@@ -978,10 +978,7 @@
     {
         RMMapTiledLayerView *tiledLayerView = [[RMMapTiledLayerView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height) mapView:self forTileSource:tileSource];
 
-        if (self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
-            ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength * 2.0, tileSideLength * 2.0);
-        else
-            ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
+        ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
 
         [_tiledLayersSuperview addSubview:tiledLayerView];
     }
@@ -1657,10 +1654,7 @@
 
         RMMapTiledLayerView *tiledLayerView = [[RMMapTiledLayerView alloc] initWithFrame:CGRectMake(0.0, 0.0, contentSize.width, contentSize.height) mapView:self forTileSource:newTileSource];
 
-        if (self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
-            ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength * 2.0, tileSideLength * 2.0);
-        else
-            ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
+        ((CATiledLayer *)tiledLayerView.layer).tileSize = CGSizeMake(tileSideLength, tileSideLength);
 
         if (index >= [[_tileSourcesContainer tileSources] count])
             [_tiledLayersSuperview addSubview:tiledLayerView];
@@ -1883,7 +1877,7 @@
 {
     tileSourcesMinZoom = ceilf(tileSourcesMinZoom) - 0.99;
 
-    if ( ! self.adjustTilesForRetinaDisplay)
+    if ( ! self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
         tileSourcesMinZoom -= 1.0;
 
     [self setMinZoom:tileSourcesMinZoom];
@@ -1910,7 +1904,7 @@
 {
     tileSourcesMaxZoom = floorf(tileSourcesMaxZoom);
 
-    if ( ! self.adjustTilesForRetinaDisplay)
+    if ( ! self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
         tileSourcesMaxZoom -= 1.0;
 
     [self setMaxZoom:tileSourcesMaxZoom];
@@ -1936,7 +1930,7 @@
 {
     float zoom = ceilf(_zoom);
 
-    if ( ! self.adjustTilesForRetinaDisplay)
+    if ( ! self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
         zoom += 1.0;
 
     return zoom;
@@ -1944,9 +1938,9 @@
 
 - (void)setTileSourcesZoom:(float)tileSourcesZoom
 {
-    tileSourcesZoom = floorf(tileSourcesZoom) - 0.99;
+    tileSourcesZoom = floorf(tileSourcesZoom);
 
-    if ( ! self.adjustTilesForRetinaDisplay)
+    if ( ! self.adjustTilesForRetinaDisplay && _screenScale > 1.0)
         tileSourcesZoom -= 1.0;
 
     [self setZoom:tileSourcesZoom];
