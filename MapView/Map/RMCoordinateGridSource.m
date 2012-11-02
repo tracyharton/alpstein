@@ -93,7 +93,7 @@ static double coordinateGridSpacingDecimal[19] = {
         return nil;
 
     self.minZoom = 5;
-    self.maxZoom = 18;
+    self.maxZoom = 17;
 
     self.opaque = NO;
 
