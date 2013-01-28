@@ -128,7 +128,9 @@
 
     _uniqueTilecacheKey = [[[path lastPathComponent] stringByDeletingPathExtension] retain];
 
-    _queue = [[FMDatabaseQueue databaseQueueWithPath:path] retain];
+    NSString* fullPath = [[NSBundle mainBundle] pathForResource:path ofType:nil];
+    
+    _queue = [[FMDatabaseQueue databaseQueueWithPath:fullPath] retain];
 
     if ( ! _queue)
     {
